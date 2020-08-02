@@ -1,7 +1,8 @@
 <?php
 
-class JsonFileHandler implements IFileHandler
-{
+require_once 'IFileHandler.php';
+
+class JsonFileHandler implements IFileHandler{
 
     public $directory;
     public $filename;

@@ -1,9 +1,10 @@
 <?php
 
 interface IFileHandler{
-    function CreateDirectory();
-    function SaveFile($value);
-    function ReadFile();
+    public function CreateDirectory();
+    public function SaveFile($value);
+    public function ReadFile();
+    public function ReadConfiguration();
 
 }
 

@@ -1,6 +1,6 @@
 <?php
 
-    class Account{
+    class Publicacion{
     
 
         public $id;        
@@ -21,10 +21,10 @@
 
             
             $this->id = $id;
-            $this->nombre = $titulo;
-            $this->apellido = $contenido;
-            $this->correo = $fecha;
-            $this->usuario = $idUsuario;
+            $this->titulo = $titulo;
+            $this->contenido = $contenido;
+            $this->fecha = $fecha;
+            $this->idUsuario = $idUsuario;
             
         }
 

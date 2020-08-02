@@ -9,12 +9,8 @@ class AccountService implements ServiceBase{
     public $filename;
 
     public function __construct($directory){
-
         $this->utilities = new Utilities();
         $this->context = new DatabaseContext($directory);
-        $this->directory = "data";
-        $this->filename = "accounts";
-        $this->filehandler = new JsonFileHandler($this->directory, $this->filename);
 
     }
 
@@ -83,6 +79,37 @@ class AccountService implements ServiceBase{
 
     }
 
+    public function GetByUser($user){
+
+        $account = new Account();
+
+        $stmnt = $this->context->db->prepare("Select * from account where usuario = ?");
+        $stmnt->bind_param("s", $user);
+        $stmnt->execute();
+
+        $result = $stmnt->get_result();
+
+        if($result->num_rows === 0){
+            return null;
+        }else{
+
+            while($row = $result->fetch_object()){
+
+                $account->id = $row->id;
+                $account->nombre = $row->nombre;
+                $account->apellido = $row->apellido;
+                $account->correo = $row->correo;
+                $account->usuario = $row->usuario;
+                $account->pass = $row->pass;
+
+            }
+
+        }
+        $stmnt->close();
+        return $account;
+
+    }
+
     public function Add($entidad){
 
 
@@ -100,14 +127,13 @@ class AccountService implements ServiceBase{
             if($fotoFile['error'] == 4){
                 $entidad->fotoPerfil = "";
             }else{
-
                 $typeReplace = str_replace("image/", "", $_FILES['fotoPerfil']['type']); 
                 $type = $fotoFile['type'];
                 $size = $fotoFile['size'];
                 $nombre = $accountID . '.' . $typeReplace;
                 $tmpname = $fotoFile['tmp_name'];
 
-                $success = $this->utilities->agregarImagen('../image/cuentas/', $nombre, $tmpname, $type, $size);
+                $success = $this->utilities->agregarImagen('image/cuentas/', $nombre, $tmpname, $type, $size);
 
                 if($success){
                     $stmnt = $this->context->db->prepare("update account set fotoPerfil = ? where id = ?");
